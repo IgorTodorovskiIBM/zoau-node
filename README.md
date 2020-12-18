@@ -16,7 +16,8 @@ APIs in Node.js!
 
 ## System Requirements
 
-* ZOAU v1.1.0 or above should be installed on the system: https://www.ibm.com/support/knowledgecenter/SSKFYE_1.1.0/install.html
+* ZOAU v1.1.0 or above is required on the system.
+  * For more details, visit: https://www.ibm.com/support/knowledgecenter/SSKFYE_1.1.0/install.html
 
 ## Setup
 
