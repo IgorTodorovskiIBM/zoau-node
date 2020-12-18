@@ -1,10 +1,10 @@
 var zoau = require('../../')
-zoau.datasets.listing("ITODORO.*").then(console.log)
-.catch(function (errr) {
-     console.log(errr);
+
+zoau.datasets.listing("SYS1.PARM*", 1).then(console.log)
+.catch(function (err) {
+     console.log(err);
 });
 
-zoau.datasets.listing("ZSW.*", 1).then(console.log)
-.catch(function (errr) {
-     console.log(errr);
-});
+zoau.datasets.exists("SYS1.PARMLIB").then(console.log)
+
+zoau.datasets.list_members("SYS1.PARMLIB").then(console.log).catch(console.error);
