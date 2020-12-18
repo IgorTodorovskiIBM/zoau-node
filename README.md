@@ -1,2 +1,2 @@
 # node-zoau
-Native Node Modules for Z Open Automation Utilities (ZOAU)
+Node Module for Z Open Automation Utilities (ZOAU)
