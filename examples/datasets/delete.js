@@ -7,7 +7,7 @@ const DSN3 = `'${ID}.ZOAU3c'`;
 const DSN4 = `'${ID}.ZOAU3d'`;
 const DSN5 = `'${ID}.ZOAU3e'`;
 
-const DSNPATTERN = `'${ID}.ZOAU3*'`;
+const DSNPATTERN = `${ID}.ZOAU3*`;
 
 async function test() {
   console.log(DSNPATTERN);
