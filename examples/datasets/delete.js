@@ -1,13 +1,13 @@
 var zoau = require('../../lib/zoau.js')
 
 const ID = process.env.USER;
-const DSN1 = `'${ID}.BADFILE.ZOAU3a'`;
-const DSN2 = `'${ID}.BADFILE.ZOAU3b'`;
-const DSN3 = `'${ID}.BADFILE.ZOAU3c'`;
-const DSN4 = `'${ID}.BADFILE.ZOAU3d'`;
-const DSN5 = `'${ID}.BADFILE.ZOAU3e'`;
+const DSN1 = `'${ID}.ZOAU3a'`;
+const DSN2 = `'${ID}.ZOAU3b'`;
+const DSN3 = `'${ID}.ZOAU3c'`;
+const DSN4 = `'${ID}.ZOAU3d'`;
+const DSN5 = `'${ID}.ZOAU3e'`;
 
-const DSNPATTERN = `'${ID}.BADFILE.ZOAU3*'`;
+const DSNPATTERN = `'${ID}.ZOAU3*'`;
 
 async function test() {
   console.log(DSNPATTERN);
