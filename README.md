@@ -56,6 +56,58 @@ node listds.js
 
 TODO
 
+## Contributing
+
+If you are looking to contribute to node-zoau development, follow these steps
+to set up your development environment:
+
+1. Follow the instructions in
+https://www.ibm.com/support/knowledgecenter/SSKFYE_1.1.0/install.html to install
+and configure ZOAU on your system.
+
+2. Verify that ZOAU is successfully installed using `type -a mvscmdauth`. The
+output of the command should contain the path set in the `$ZOAU_HOME` variable
+from the previous step.
+
+```bash
+$ echo $ZOAU_HOME
+/usr/lpp/IBM/zoautil
+$ type -a mvscmdauth
+mvscmdauth is /usr/lpp/IBM/zoautil/bin/mvscmdauth
+```
+
+3. Verify that ZOAU is APF-authorized using `ls -E $ZOAU_HOME/bin`. Examine the
+output and ensure that the `mvscmdauth` and `mvscmdauthhelper` binaries shows
+an `a---` on the second column.
+
+```bash
+$ ls -E $ZOAU_HOME/bin
+...
+-rwxr-xr-x  a---  1 OPNZOS   CDEV       98304 Sep 25 10:07 mvscmdauth
+-rwxr-xr-x  a---  1 OPNZOS   CDEV      282624 Sep 25 10:07 mvscmdauthhelper
+...
+```
+
+If the `a` is not present, you must set the APF authorization bit using the
+commands `extattr +a $ZOAU_HOME/bin/mvscmdauth` and
+`extattr +a $ZOAU_HOME/bin/mvscmdauthhelper`.
+
+If you are not able to set the APF authorization bit, please consult your
+systems programmer, as you may lack the necessary permissions.
+
+4. Install the dependencies required for node-zoau.
+
+```bash
+$ npm install
+```
+
+5. Verify that node-zoau is working by running the provided test cases under
+[examples/](examples).
+
+```bash
+$ node examples/datasets/compare.js
+```
+
 ## Legalities
 
 TODO
