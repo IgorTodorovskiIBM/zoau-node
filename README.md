@@ -16,6 +16,8 @@ APIs in Node.js!
 
 ## System Requirements
 
+* IBM® SDK for Node.js - z/OS® 14.15.1 or later
+* z/OS V2R3 or later
 * ZOAU v1.1.0 or above is required on the system.
   * For more details, visit: https://www.ibm.com/support/knowledgecenter/SSKFYE_1.1.0/install.html
 
