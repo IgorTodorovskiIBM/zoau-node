@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Node.js APIs to IBM® Z Open Automation Utilitis (ZAU)",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
   "repository": "ibmruntimes/node-zoau",
   "keywords": [
     "zos",
