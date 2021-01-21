@@ -1,4 +1,3 @@
-// Tests find_member, move_member, delete_members
 const zoau = require('../../lib/zoau.js')
 const fs = require('fs');
 
@@ -8,7 +7,6 @@ const PDS_SRC = 'SYS1.PARMLIB';
 const PDS_TGT1 = `${ID}.ZOAU6A.PDS`;
 const PDS_TGT1I = `${ID}.ZOAU6?.PDS`;
 const PDS_TGT2 = `${ID}.ZOAU6B.PDS`;
-const MEM_SRC = `'${PDS_SRC}(ADYSET0D)'`;
 
 const hrTime = process.hrtime()
 const nownano = hrTime[0] * 1000000000 + hrTime[1];
@@ -24,24 +22,22 @@ async function delIfExists(file) {
     fs.unlinkSync(ZIP1);
 }
 
-async function verifyDS() {
-  console.log(`Test: list_members of ${HLQ}...`);
+async function verifyDS(exp) {
+  console.log(`Test: list_members of ${HLQ}`);
   var res = await zoau.datasets.list_members(PDS_TGT1).catch(errfunc);
-  var exp = "ABCD4,ABCD5,MEM1,MEM2,MEM3,";
-  if (res.length == exp.length && res.every(function(elem, i) {return elem == exp[i];}))
-    errfunc(`Error: unexpected members after unzip: found ${res}, expected ${exp}`);
+  if (!(res.length == exp.length && res.every(function(elem, i) {return elem == exp[i];})))
+    errfunc(`unexpected members after unzip: found ${res}, expected ${exp}`);
 }
 
-async function verifyxDS() {
-  console.log(`Test: list_members of ${HLQ}...`);
+async function verifyxDS(exp) {
+  console.log(`Test: list_members of ${HLQ}`);
   var res = await zoau.datasets.list_members(PDS_TGT1).catch(errfunc);
-  var exp = "MEM1,MEM3,";
-  if (res.length == exp.length && res.every(function(elem, i) {return elem == exp[i];}))
-    errfunc(`Error: unexpected members after unzip: found ${res}, expected ${exp}`);
+  if (!(res.length == exp.length && res.every(function(elem, i) {return elem == exp[i];})))
+    errfunc(`unexpected members after unzip: found ${res}, expected ${exp}`);
 }
 
 async function deleteDS(ds) {
-  console.log(`Test: delete ${ds}...`);
+  console.log(`Test: delete ${ds}`);
   await zoau.datasets.delete(ds).catch(errfunc);
 }
 
@@ -53,49 +49,60 @@ async function dispResult(res) {
 
 async function test() {
  try {
-  console.log("Test: checking if required " + PDS_SRC + " exists...");
-  if (!await zoau.datasets.exists(PDS_SRC).catch(errfunc))
-    console.error("This test assumes dataset " + PDS_SRC + " exists.");
+  console.log(`Test: checking if required ${PDS_SRC} exists`);
+  var rc = await zoau.datasets.exists(PDS_SRC).catch(errfunc);
+  if (rc !== true)
+    errfunc(`This test assumes dataset ${PDS_SRC} exists, change it to another PDS that exists on your system.`);
+
+  console.log(`Test: list_members of ${PDS_SRC} to get a member`);
+  var res = await zoau.datasets.list_members(PDS_SRC).catch(errfunc);
+  if (res.length <= 0)
+    errfunc(`This test assumes dataset ${PDS_SRC} exists and has at least one member, change it to another such PDS that exists on your system.`);
+
+  var MEM_SRC = `'${PDS_SRC}(${res[0]})'`;
 
   if (await zoau.datasets.exists(PDS_TGT1).catch(errfunc))
     deleteDS(PDS_TGT1);
+  if (await zoau.datasets.exists(PDS_TGT2).catch(errfunc))
+    deleteDS(PDS_TGT2);
 
-  console.log("Test: create " + PDS_TGT1 + "...");
+  console.log(`Test: create ${PDS_TGT1}`);
   var details = { "primary_space" : 50 };
   var dsdet = await zoau.datasets.create(PDS_TGT1, "PDS", details).catch(errfunc);
   console.log(`res=${JSON.stringify(dsdet)}`);
   var volume = dsdet[0]["volume"];
   console.log(`Volume = ${volume}`);
 
-  console.log("Test: create " + PDS_TGT2 + "...");
+  console.log(`Test: create ${PDS_TGT2}`);
   details = { "primary_space" : 50 };
   await zoau.datasets.create(PDS_TGT2, "PDS", details).then(console.log).catch(errfunc);
 
   for (i=1; i<=3; i++) {
     let tgt = (i < 4) ? `'${PDS_TGT1}(MEM${i})'` : `'${PDS_TGT1}(ABCD${i})'`;
-    console.log("Test: copy " + MEM_SRC + " to " + tgt + "...");
+    console.log(`Test: copy ${MEM_SRC} to ${tgt}`);
     await zoau.datasets.copy(MEM_SRC, tgt).catch(errfunc);
   }
 
   for (i=1; i<=3; i++) {
     let tgt = (i < 4) ? `'${PDS_TGT2}(ME${i})'` : `'${PDS_TGT2}(ABC${i})'`;
-    console.log("Test: copy " + MEM_SRC + " to " + tgt + "...");
+    console.log(`Test: copy ${MEM_SRC} to ${tgt}`);
     await zoau.datasets.copy(MEM_SRC, tgt).catch(errfunc);
   }
 
-  console.log(`Test: zip ${PDS_TGT1}...`);
+  console.log(`Test: zip ${PDS_TGT1}`);
   await delIfExists(ZIP1);
   await zoau.datasets.zip(ZIP1, PDS_TGT1).catch(errfunc);
   if (!fs.existsSync(ZIP1))
-    errfunc(`Error: expected zip file not found: ${ZIP1}`);
+    errfunc(`expected zip file not found: ${ZIP1}`);
   await deleteDS(PDS_TGT1);
 
-  console.log(`Test: unzip ${ZIP1}...`);
+  console.log(`Test: unzip ${ZIP1}`);
   await zoau.datasets.unzip(ZIP1, HLQ).catch(errfunc);
-  await verifyDS();
+  var exp = [ "MEM1", "MEM2", "MEM3" ];
+  await verifyDS(exp);
 
   // ---------------
-  console.log(`Test: zip ${ZIP1} with size and overwrite (-s5M -o)...`);
+  console.log(`Test: zip ${ZIP1} with size and overwrite (-s5M -o)`);
   var args = {
     "size" : "5M",
     "dataset" : false,
@@ -109,12 +116,13 @@ async function test() {
     errfunc(res["stderr"]);
 
   await deleteDS(PDS_TGT1);
-  console.log(`Test: unzip ${ZIP1}...`);
+  console.log(`Test: unzip ${ZIP1}`);
   await zoau.datasets.unzip(ZIP1, HLQ).catch(errfunc);
-  await verifyDS();
+  exp = [ "MEM1", "MEM2", "MEM3" ];
+  await verifyDS(exp);
 
   // ---------------
-  console.log(`Test: zip ${PDS_TGT1} and ${PDS_TGT2} to dataset $ZIPDS1...`);
+  console.log(`Test: zip ${PDS_TGT1} and ${PDS_TGT2} to dataset $ZIPDS1`);
   var args = {
     "dataset" : true,
     "overwrite" : true,
@@ -127,7 +135,7 @@ async function test() {
   await deleteDS(PDS_TGT1);
   if (await zoau.datasets.exists(PDS_TGT2).catch(errfunc))
     await deleteDS(PDS_TGT2);
-  console.log(`Test: unzip from dataset ${ZIPDS1}, args should be -D -o -i"x" -e"y"...`);
+  console.log(`Test: unzip from dataset ${ZIPDS1}, args should be -D -o -i"x" -e"y"`);
   args = {
     "dataset" : true,
     "overwrite" : true,
@@ -136,18 +144,19 @@ async function test() {
   };
 
   await zoau.datasets.unzip(ZIPDS1, HLQ, args).catch(errfunc);
-  await verifyxDS();
+  var exp = [ "MEM1", "MEM2", "MEM3" ];
+  await verifyxDS(exp);
   await deleteDS(PDS_TGT1);
   await deleteDS(ZIPDS1);
   if (await zoau.datasets.exists(PDS_TGT2).catch(errfunc))
-    errfunc(`Error: unzip shouldn't have extracted ${PDS_TGT2} as it was excluded.}`);
+    errfunc(`unzip shouldn't have extracted ${PDS_TGT2} as it was excluded.}`);
 
   // TODO(gabylb): test remaining args for both zip and unzip
 
   console.log("All tests passed.");
  } catch(err) {
    console.error(err);
-   process.exit(-1); //TODO(gabylb) - process still exits with code 0
+   process.exit(-1);
  }
 }
 

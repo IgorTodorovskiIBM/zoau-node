@@ -1,45 +1,72 @@
-var zoau = require('../../lib/zoau.js')
+const zoau = require('../../lib/zoau.js')
 
 const ID = process.env.USER
 
+function errfunc(err) {
+  throw new Error(err);
+}
+
 async function test() {
-  console.log("Test: create 1st dataset");
-  var details = { "primary_space" : 10  }
-  await zoau.datasets.create(`'${ID}.ZOAU2a'`, "SEQ", details).then(console.log).catch(console.error);
+ try {
+  var res;
+  console.log("Test: delete work  datasets");
+  await zoau.datasets.delete(`${ID}.ZOAU2?`).catch(errfunc);
+
+  console.log("Test: create source & target dataset");
+  await zoau.datasets.create(`${ID}.ZOAU2a`, "SEQ").then(console.log).catch(errfunc);
+  await zoau.datasets.create(`${ID}.ZOAU2b`, "SEQ").then(console.log).catch(errfunc);
 
   console.log("Test: write to dataset 2a");
-  await zoau.datasets.write(`'${ID}.ZOAU2a'`,
-`'This is the first line.
+  await zoau.datasets.write(`${ID}.ZOAU2a`,
+`This is the first line.
 This is the second line.
-This is the thrid line.'`
-  ).then(console.log).catch(console.error);
+This is the thrid line.`
+  ).then(console.log).catch(errfunc);
 
-  console.log("Test: copy 2a to 2b...");
-  await zoau.datasets.copy(`'${ID}.ZOAU2a'`, `'${ID}.ZOAU2b'`).then(console.log).catch(console.error);
+  console.log("Test: copy 2a to 2b");
+  await zoau.datasets.copy(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`).then(console.log).catch(errfunc);
 
-  console.log("Test: compare identical datasets...");
-  await zoau.datasets._compare(`'${ID}.ZOAU2a'`, `'${ID}.ZOAU2b'`).then(console.log).catch(console.error);
+  console.log("Test: compare identical datasets");
+  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`).catch(errfunc);
+  if (res["exit"] !== 0 || res["stdout"].length !== 0 || res["stderr"].length != 0)
+    errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
-  console.log("Test: write an extra line to 2a...");
-  await zoau.datasets.write(`'${ID}.ZOAU2a'`, "'This is the fourth line.'", true).catch(console.error);
+  console.log("Test: write an extra line to 2a");
+  await zoau.datasets.write(`${ID}.ZOAU2a`, "This is the fourth line.", true).catch(errfunc);
 
-  console.log("Test: compare datasets that differ...");
-  await zoau.datasets._compare(`'${ID}.ZOAU2a'`, `'${ID}.ZOAU2b'`).then(console.log).catch(console.error);
+  console.log("Test: compare datasets that differ");
+  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`).then(console.log).catch(errfunc);
+  if (res === 0)
+    errfunc("_compare failed");
 
-  console.log("Test: match the 2nd dataset but case some words differently...");
-  await zoau.datasets.write(`'${ID}.ZOAU2b'`, "'This IS the FOURTH Line.'", true).catch(console.error);
+  console.log("Test: match the 2nd dataset but case some words differently");
+  await zoau.datasets.write(`${ID}.ZOAU2b`, "This IS the FOURTH Line.", true).catch(errfunc);
 
-  console.log("Test: compare datasets that differ only in case, ignore case, should not differ...");
-  await zoau.datasets._compare(`'${ID}.ZOAU2a'`, `'${ID}.ZOAU2b'`, {"ignore_case" : true}).then(console.log).catch(console.error);
+  console.log("Test: compare datasets that differ only in case, ignore case, should not differ");
+  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : true}).catch(errfunc);
+  if (res["exit"] !== 0)
+    errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
-  console.log("Test: compare datasets that differ only in case, don't ignore case (explicit this time), should differ...");
-  var ret = await zoau.datasets._compare(`'${ID}.ZOAU2a'`, `'${ID}.ZOAU2b'`, {"ignore_case" : false}).then(console.log).catch(console.error);
+  console.log("Test: compare datasets that differ only in case, don't ignore case (explicit this time), should differ");
+  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false}).catch(errfunc);
+  if (res["exit"] === 0)
+    errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
-  console.log("Test: compare the columns containing 'This', should not differ...");
-  await zoau.datasets._compare(`'${ID}.ZOAU2a'`, `'${ID}.ZOAU2b'`, {"ignore_case" : false, "columns" : "1:4"}).then(console.log).catch(console.error);
+  console.log("Test: compare the columns containing 'This', should not differ");
+  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false, "columns" : "1:4"}).catch(errfunc);
+  if (res["exit"] !== 0)
+    errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
-  console.log("Test: compare non existent datasets...");
-  await zoau.datasets._compare(`'${ID}.ZOAU2c'`, `'${ID}.ZOAU2d'`).then(console.log).catch(console.error);
+  console.log("Test: compare non existent datasets");
+  res = await zoau.datasets._compare(`${ID}.ZOAU2c`, `${ID}.ZOAU2d`).then(console.log).catch(errfunc);
+  if (res === 0)
+    errfunc("_compare failed");
+
+  console.log("All tests passed.");
+ } catch(err) {
+   errfunc(err);
+   process.exit(-1);
+ }
 }
 
 test();

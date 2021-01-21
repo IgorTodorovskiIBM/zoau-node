@@ -1,4 +1,3 @@
-// Tests find_member, move_member, delete_members
 var zoau = require('../../lib/zoau.js')
 const { exec } = require('child_process');
 
@@ -58,7 +57,7 @@ async function test() {
   res = res.split("\n");
   exp = [ "ONE", "# OPEN BLOCK", "TWO", "THREE", "# CLOSE BLOCK", "FOUR" ];
   if (!(res.length == exp.length && res.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
-    errfunc(`Error: unexpected line in ${DS}: found ${res}, expected ${exp}`);
+    errfunc(`unexpected line in ${DS}: found ${res}, expected ${exp}`);
   }
 
   //---------------------------- insert before
@@ -73,7 +72,7 @@ async function test() {
   res = res.split("\n");
   exp = [ "ONE", "# OPEN BLOCK", "TWO", "THREE", "# CLOSE BLOCK", "FOUR" ];
   if (!(res.length == exp.length && res.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
-    errfunc(`Error: unexpected line in ${DS}: found ${res}, expected ${exp}`);
+    errfunc(`unexpected line in ${DS}: found ${res}, expected ${exp}`);
   }
 
   //---------------------------- delete
@@ -93,7 +92,7 @@ async function test() {
   res = res.split("\n");
   exp = [ "ONE", "THREE" ];
   if (!(res.length == exp.length && res.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
-    errfunc(`Error: unexpected line in ${DS}: found ${res}, expected ${exp}`);
+    errfunc(`unexpected line in ${DS}: found ${res}, expected ${exp}`);
   }
 
   //---------------------------- lock
@@ -113,7 +112,7 @@ async function test() {
   console.log(`read res=${res}`);
   exp = [ "ONE", "THREE" ];
   if (!(res.length == exp.length && res.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
-    errfunc(`Error: unexpected line in ${DS}: found ${res}, expected ${exp}`);
+    errfunc(`unexpected line in ${DS}: found ${res}, expected ${exp}`);
   }
 
   console.log("Test: blockinfile unlock dataset");
@@ -127,13 +126,13 @@ async function test() {
   res = res.split("\n");
   exp = [ "ONE", "# OPEN BLOCK", "TWO", "# CLOSE BLOCK", "THREE" ];
   if (!(res.length == exp.length && res.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
-    errfunc(`Error: unexpected line in ${DS}: found ${res}, expected ${exp}`);
+    errfunc(`unexpected line in ${DS}: found ${res}, expected ${exp}`);
   }
 
   console.log("All tests passed.");
  } catch(err) {
    console.error(err);
-   process.exit(-1); //TODO(gabylb) - process still exits with code 0
+   process.exit(-1);
  }
 }
 
