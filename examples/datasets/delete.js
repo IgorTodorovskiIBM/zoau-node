@@ -16,6 +16,10 @@ function errfunc(err) {
 async function test() {
  try {
   console.log(DSNPATTERN);
+
+  console.log("Test: delete all datasets matching ZOAU3* pattern, if any");
+  await zoau.datasets.delete(DSNPATTERN, {"force": true}).then(console.log).catch(errfunc);
+
   console.log("Test: create 5 datasets");
   var details = { "primary_space" : 10  }
   var res, exp;

@@ -44,7 +44,7 @@ async function test() {
   res = await zoau.datasets.read(DS2, {"tail" : 1}).catch(errfunc);
   exp = line.padEnd(80, ' ');
   if (res !== exp)
-    errfunc(`unexpected line in ${DS2}: found ${res}, expected ${exp}`);
+    errfunc(`unexpected line in ${DS2}: found:\n|${res}|\nexpected:\n|${exp}|`);
 
   console.log("All tests passed.");
  } catch(err) {

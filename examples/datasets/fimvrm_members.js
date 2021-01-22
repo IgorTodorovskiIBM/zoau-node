@@ -65,7 +65,7 @@ async function test() {
   console.log(`Test: find_member MEM1 in ${PDS_TGT1}`);
   res = await zoau.datasets.find_member("ABC4", PDS_TGT2).catch(errfunc);
   if (res != PDS_TGT2)
-    errfunc(`find_member: ABC4 found in ${res}, expected PDS_TGT2`);
+    errfunc(`find_member: ABC4 found in ${res}, expected ${PDS_TGT2}`);
 
   console.log(`Test: find_member MEM1 in ${PDS_TGT1} and ${PDS_TGT2}`);
   res = await zoau.datasets.find_member("MEM1", `${PDS_TGT1}:${PDS_TGT2}`).catch(errfunc);

@@ -9,6 +9,9 @@ function errfunc(err) {
 
 async function test() {
  try {
+  console.log(`Test: delete ${DSN} if exists`);
+  await zoau.datasets.delete(DSN, {"force": true}).then(console.log).catch(errfunc);
+
   var res, exp, options, details, resarr;
   console.log("Test: create");
   details = { "primary_space" : 10  }
@@ -43,18 +46,18 @@ async function test() {
   console.log("Test: read all");
   var lines = `This is the first line.\nThis is the second line.\nThis is the third line.`;
   var linesarr = lines.split("\n");
-  res = await zoau.datasets.read(DSN).catch(errfunc);
-  resarr = res.split("\n");
   exp = linesarr;
-  if (!(resarr.length === exp.length && resarr.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
+  res = await zoau.datasets.read(DSN).catch(errfunc);
+  res = res.split("\n");
+  if (!(res.length === exp.length && res.every(function(elem, i) { return elem === exp[i].padEnd(80, ' '); }))) {
     errfunc(`read after write failed, expected:\n${exp}\ngot:\n${res}`);
   }
 
   console.log("Test: read with tail -1");
   res = await zoau.datasets.read(DSN, {"tail" : 1}).catch(errfunc);
-  exp = linesarr[2].padEnd(80, ' ');;
+  exp = linesarr[2].padEnd(80, ' ');
   if (res !== exp) {
-    errfunc(`read after write failed, expected:\n${exp}\ngot:\n${res}`);
+    errfunc(`read after write failed, expected:\n${exp}|\ngot:\n${res}|`);
   }
   
   console.log("Test: _read from_line 2");
@@ -72,7 +75,7 @@ async function test() {
   res = await zoau.datasets.read(DSN).catch(errfunc);
   exp = "Only line in dataset.".padEnd(80, ' ');
   if (res !== exp) {
-    errfunc(`read after write failed, expected:\n${exp}\ngot:\n${res}`);
+    errfunc(`read after write failed, expected:\n${exp}|\ngot:\n${res}|`);
   }
 
   console.log("All tests passed.");

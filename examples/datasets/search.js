@@ -10,6 +10,10 @@ function errfunc(err) {
 
 async function test() {
  try {
+  console.log(`Test: delete ${DSN1} and ${DSN2} if any exists`);
+  await zoau.datasets.delete(DSN1, {"force": true}).then(console.log).catch(errfunc);
+  await zoau.datasets.delete(DSN2, {"force": true}).then(console.log).catch(errfunc);
+
   var res, line, origlines, expEnd;
   console.log("Test: create 1st dataset");
   var details = { "primary_space" : 10  }
@@ -45,7 +49,6 @@ async function test() {
 
   console.log("Test: search datasets - specify all options");
   res = await zoau.datasets.search(`${ID}.ZOAU3?`, "the Second", {"ignore_case" : true, "display_lines" : true, "lines" : 2, "print_datasets" : true}).catch(errfunc);
-  res = res.split("\n");
   var lines = origlines.split("\n");
   exp = [`${DSN1.padEnd(60,' ')}*:  ${lines[0].padEnd(128,' ')}`,
          `${DSN1.padEnd(60,' ')}2:  ${lines[1].padEnd(128,' ')}`,

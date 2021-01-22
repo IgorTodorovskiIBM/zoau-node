@@ -9,6 +9,9 @@ function errfunc(err) {
 
 async function test() {
  try {
+  console.log(`Test: delete ${DS} if exists`);
+  await zoau.datasets.delete(DS, {"force": true}).then(console.log).catch(errfunc);
+
   console.log(`Test: create ${DS}`);
   var details = { "primary_space" : 10  }
   await zoau.datasets.create(DS, "SEQ", details).then(console.log).catch(errfunc);
