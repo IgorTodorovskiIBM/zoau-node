@@ -10,7 +10,7 @@ async function test() {
  try {
   var res;
   console.log("Test: delete work  datasets");
-  await zoau.datasets.delete(`${ID}.ZOAU2?`).catch(errfunc);
+  await zoau.datasets.delete(`${ID}.ZOAU2?`, {"force":true}).catch(errfunc);
 
   console.log("Test: create source & target dataset");
   await zoau.datasets.create(`${ID}.ZOAU2a`, "SEQ").then(console.log).catch(errfunc);
@@ -53,9 +53,10 @@ This is the thrid line.`
     errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
   console.log("Test: compare the columns containing 'This', should not differ");
-  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false, "columns" : "1:4"}).catch(errfunc);
-  if (res["exit"] !== 0)
-    errfunc(`_compare failed: res=${JSON.stringify(res)}`);
+  res = await zoau.datasets.compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false, "columns" : "1:4"}).then(console.log).catch(errfunc);
+console.log(`res=${res}`);
+  //if (res !== null)
+  //  errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
   console.log("Test: compare non existent datasets");
   res = await zoau.datasets._compare(`${ID}.ZOAU2c`, `${ID}.ZOAU2d`).then(console.log).catch(errfunc);
