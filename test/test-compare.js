@@ -5,6 +5,10 @@ const ID = process.env.USER;
 
 describe('Dataset#compare', () => {
   beforeEach(async () => {
+    await zoau.datasets.delete(
+      `'${ID}.ZOAU2a'`,
+      { "force" : true }
+    );
     let zoau2a = await zoau.datasets.create(
       `'${ID}.ZOAU2a'`,
       'SEQ',
@@ -14,9 +18,9 @@ describe('Dataset#compare', () => {
 
     let writeRC = await zoau.datasets.write(
       `'${ID}.ZOAU2a'`,
-      `'This is the first line.\n` +
+      `This is the first line.\n` +
       `This is the second line.\n` +
-      `This is the thrid line.'`
+      `This is the thrid line.`
     );
     assert.equal(writeRC, 0);
 
@@ -34,7 +38,7 @@ describe('Dataset#compare', () => {
         'columns' : '1:4'
       }
     );
-    assert.equal(result, null);
+    assert.equal(result, "");
   });
 
   afterEach(async () => {
