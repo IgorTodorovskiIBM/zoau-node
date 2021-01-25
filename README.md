@@ -45,11 +45,10 @@ npm install node-zoau
 2. Create a file named `listds.js` containing the following contents:
 
 ```js
-var zoau = require('zoau')
-zoau.datasets.listing("SYS1.PARM*", 1).then(console.log)
-.catch(function (err) {
-     console.log(err);
-});
+const ds=require('./lib/zoau.js').datasets;
+ds.listing("SYS1.PARM*", {"detailed":true})
+	.then(console.log)
+	.catch(console.error);
 ```
 
 This code will list all datasets starting with SYS.PARM.  We have chosen
