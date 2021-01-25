@@ -8,6 +8,7 @@
  * [Setup](#setup)
  * [Quick Start](#quick-start)
  * [API Documentation](#api-documentation)
+ * [Contributing](#contributing)
  * [Legalities](#legalities)
 
 ## Overview
@@ -102,17 +103,23 @@ commands `extattr +a $ZOAU_HOME/bin/mvscmdauth` and
 If you are not able to set the APF authorization bit, please consult your
 systems programmer, as you may lack the necessary permissions.
 
-4. Install the dependencies required for node-zoau.
+4. Clone the node-zoau repository.
 
 ```bash
+$ git clone git@github.ibm.com:open-z/node-zoau.git
+```
+
+5. Install the dependencies required for node-zoau.
+
+```bash
+$ cd node-zoau
 $ npm install
 ```
 
-5. Verify that node-zoau is working by running the provided test cases under
-[examples/](examples).
+6. Verify that node-zoau is working by running the test suite.
 
 ```bash
-$ node examples/datasets/compare.js
+$ npm test
 ```
 
 ## Legalities
