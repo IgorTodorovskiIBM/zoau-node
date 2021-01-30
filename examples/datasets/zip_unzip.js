@@ -14,7 +14,7 @@ const ZIP1 = `/tmp/${ID}.${nownano}.zip1`;
 const ZIPDS1 = `${ID}.ZOAU4A.ZIP`;
 
 function errfunc(err) {
-  throw new Error(err);
+  throw err;
 }
 
 async function delIfExists(file) {
@@ -156,7 +156,11 @@ async function test() {
 
   console.log("All tests passed.");
  } catch(err) {
-   console.error(err);
+   var json = JSON.parse(err.message);
+   console.error(`Failed: ${json["command"]}`);
+   console.error(`rc = ${json["rc"]}`);
+   console.error(`stderr =  ${json["stderr"]}`);
+   console.error(`stdout = ${json["stdout"]}`);
    process.exit(-1);
  }
 }

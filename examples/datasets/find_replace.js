@@ -4,7 +4,7 @@ const ID = process.env.USER;
 const DS = `${ID}.ZOAU5.SEQ`;
 
 function errfunc(err) {
-  throw new Error(err);
+  throw err;
 }
 
 async function test() {
@@ -59,7 +59,11 @@ This is the third line.`
 
   console.log("All tests passed.");
  } catch(err) {
-   console.error(err);
+   var json = JSON.parse(err.message);
+   console.error(`Failed: ${json["command"]}`);
+   console.error(`rc = ${json["rc"]}`);
+   console.error(`stderr =  ${json["stderr"]}`);
+   console.error(`stdout = ${json["stdout"]}`);
    process.exit(-1);
  }
 }

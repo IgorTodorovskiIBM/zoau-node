@@ -5,7 +5,7 @@ const ID = process.env.USER;
 const DST = `${ID}.ZOAUTEST`;
 
 function errfunc(err) {
-  throw new Error(err);
+  throw err;
 }
 
 async function prepareDS(delOld = null) {
@@ -35,9 +35,9 @@ async function lockDS(dsn) {
 }
 
 function verifyLockError(err) {
-  if (!err.message.startsWith(`BGYSC1801E Failed to obtain the lock for ${DST}`))
-    //errfunc(err);
-    console.log(err.message);
+  var json = JSON.parse(err.message);
+  if (!json["stderr"].startsWith(`BGYSC1801E Failed to obtain the lock for ${DST}`))
+    errfunc(err.message);
 }
 
 async function test() {
@@ -172,7 +172,11 @@ async function test() {
 
   console.log("All tests passed.");
  } catch(err) {
-   console.error(err);
+   var json = JSON.parse(err.message);
+   console.error(`Failed: ${json["command"]}`);
+   console.error(`rc = ${json["rc"]}`);
+   console.error(`stderr =  ${json["stderr"]}`);
+   console.error(`stdout = ${json["stdout"]}`);
    process.exit(-1); 
  }
 }

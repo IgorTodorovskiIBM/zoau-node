@@ -3,7 +3,7 @@ const zoau = require('../../lib/zoau.js')
 const ID = process.env.USER
 
 function errfunc(err) {
-  throw new Error(err);
+  throw err;
 }
 
 async function test() {
@@ -67,7 +67,11 @@ This is the thrid line.`
 
   console.log("All tests passed.");
  } catch(err) {
-   errfunc(err);
+   var json = JSON.parse(err.message);
+   console.error(`Failed: ${json["command"]}`);
+   console.error(`rc = ${json["rc"]}`);
+   console.error(`stderr =  ${json["stderr"]}`);
+   console.error(`stdout = ${json["stdout"]}`);
    process.exit(-1);
  }
 }
