@@ -28,15 +28,16 @@ This is the thrid line.`
 
   console.log("Test: compare identical datasets");
   res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`).catch(errfunc);
-  if (res["exit"] !== 0 || res["stdout"].length !== 0 || res["stderr"].length != 0)
+  if (res["rc"] !== 0 || res["stdout"].length !== 0 || res["stderr"].length != 0)
     errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
   console.log("Test: write an extra line to 2a");
   await zoau.datasets.write(`${ID}.ZOAU2a`, "This is the fourth line.", true).catch(errfunc);
 
   console.log("Test: compare datasets that differ");
-  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`).then(console.log).catch(errfunc);
-  if (res === 0)
+  res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`).catch(errfunc);
+  console.log(`res=${JSON.stringify(res)}`);
+  if (res["rc"] === 0)
     errfunc("_compare failed");
 
   console.log("Test: match the 2nd dataset but case some words differently");
@@ -44,23 +45,24 @@ This is the thrid line.`
 
   console.log("Test: compare datasets that differ only in case, ignore case, should not differ");
   res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : true}).catch(errfunc);
-  if (res["exit"] !== 0)
+  if (res["rc"] !== 0)
     errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
   console.log("Test: compare datasets that differ only in case, don't ignore case (explicit this time), should differ");
   res = await zoau.datasets._compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false}).catch(errfunc);
-  if (res["exit"] === 0)
+  if (res["rc"] === 0)
     errfunc(`_compare failed: res=${JSON.stringify(res)}`);
 
   console.log("Test: compare the columns containing 'This', should not differ");
-  res = await zoau.datasets.compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false, "columns" : "1:4"}).then(console.log).catch(errfunc);
-console.log(`res=${res}`);
-  //if (res !== null)
-  //  errfunc(`_compare failed: res=${JSON.stringify(res)}`);
+  res = await zoau.datasets.compare(`${ID}.ZOAU2a`, `${ID}.ZOAU2b`, {"ignore_case" : false, "columns" : "1:4"}).catch(errfunc);
+  // test that res === null, not undefined or otherwise
+  if (res || res !== null || res === undefined)
+    errfunc(`compare failed: res=${JSON.stringify(res)}`);
 
   console.log("Test: compare non existent datasets");
-  res = await zoau.datasets._compare(`${ID}.ZOAU2c`, `${ID}.ZOAU2d`).then(console.log).catch(errfunc);
-  if (res === 0)
+  res = await zoau.datasets._compare(`${ID}.ZOAU2c`, `${ID}.ZOAU2d`).catch(errfunc);
+  console.log(`res=${JSON.stringify(res)}`);
+  if (res["rc"] === 0)
     errfunc("_compare failed");
 
   console.log("All tests passed.");

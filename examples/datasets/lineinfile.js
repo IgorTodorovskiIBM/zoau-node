@@ -76,9 +76,10 @@ async function test() {
 
   console.log("Test: _lineinfile replace last line with debug");
   var res = await zoau.datasets._lineinfile(DS, "TOO", "TWO", {"first_match" : true, "debug" : true}).catch(errfunc);
-  console.log(`res exit=${res["exit"]}`);
+  console.log(`res rc=${res["rc"]}`);
   console.log(`res stdout=${res["stdout"]}`);
   console.log(`res stderr=${res["stderr"]}`);
+  console.log(`res command=${res["command"]}`);
 
   console.log("Test: read and verify");
   res = await zoau.datasets.read(DS).catch(console.errfunc);

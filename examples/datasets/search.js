@@ -34,7 +34,7 @@ async function test() {
 
   console.log("Test: _search dataset - no match due to case");
   res = await zoau.datasets._search(DSN1, "the Second").catch(errfunc);
-  if (res["exit"] === 0 || res["stdout"].length !== 0 || res["stderr"].length !== 0)
+  if (res["rc"] === 0 || res["stdout"].length !== 0 || res["stderr"].length !== 0)
     errfunc(`_search expected to fail: ${JSON.stringify(res)}`);
 
   console.log("Test: search dataset - no match due to case but ignore case");

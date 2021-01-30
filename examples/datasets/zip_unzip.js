@@ -42,9 +42,10 @@ async function deleteDS(ds) {
 }
 
 async function dispResult(res) {
-  console.log(`res exit=${res["exit"]}`);
+  console.log(`res rc=${res["rc"]}`);
   console.log(`res stdout=${res["stdout"]}`);
   console.log(`res stderr=${res["stderr"]}`);
+  console.log(`res command=${res["command"]}`);
 }
 
 async function test() {
@@ -112,7 +113,7 @@ async function test() {
   };
   var res = await zoau.datasets._zip(ZIP1, PDS_TGT1, args).catch(errfunc);
   dispResult(res);
-  if (res["exit"] != 0)
+  if (res["rc"] != 0)
     errfunc(res["stderr"]);
 
   await deleteDS(PDS_TGT1);
@@ -129,7 +130,7 @@ async function test() {
   };
   var res = await zoau.datasets._zip(ZIPDS1, `${PDS_TGT1} ${PDS_TGT2}`, args).catch(errfunc);
   dispResult(res);
-  if (res["exit"] != 0)
+  if (res["rc"] != 0)
     errfunc(res["stderr"]);
 
   await deleteDS(PDS_TGT1);

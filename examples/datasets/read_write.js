@@ -33,14 +33,14 @@ async function test() {
   res = await zoau.datasets._write(DSN, "This is the second line.", true, options).catch(errfunc);
   var o = res["stderr"];
   // TODO(gabylb): 777 is an arbitrary length as a check that there is debug info
-  if (res["exit"] !== 0 || res["stdout"].length !== 0
+  if (res["rc"] !== 0 || res["stdout"].length !== 0
    || o.length < 777 || !o.includes(DSN) || !o.includes(".dsout /tmp/decho"))
     errfunc(`unexpected result returned: ${JSON.stringify(res)}`);
   console.log(`RET-2=${JSON.stringify(res)}`);
 
   console.log("Test: write and apppend a 3rd line");
   var res = await zoau.datasets._write(DSN, "This is the third line.", true).catch(errfunc);
-  if (res["exit"] !== 0 || res["stdout"].length !== 0 || res["stderr"].length !== 0)
+  if (res["rc"] !== 0 || res["stdout"].length !== 0 || res["stderr"].length !== 0)
     errfunc(`unexpected result returned: ${JSON.stringify(res)}`);
 
   console.log("Test: read all");

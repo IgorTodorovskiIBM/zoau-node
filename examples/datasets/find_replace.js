@@ -30,8 +30,8 @@ This is the third line.`
   
   console.log("Test: _find_replace -d");
   var res = await zoau.datasets._find_replace(DS, "This is the", "That was", {"debug":true}).catch(errfunc);
-  if (res["exit"] !== 0)
-    errfunc(`find_replace returned ${res["exit"]}, expected 0`);
+  if (res["rc"] !== 0)
+    errfunc(`find_replace returned ${res["rc"]}, expected 0`);
 
   //verify result including debug info
   var json = JSON.parse(res["stdout"]);
@@ -46,8 +46,8 @@ This is the third line.`
 
   console.log("Test: _find_replace -d on a string that doesn't exist");
   var res = await zoau.datasets._find_replace(DS, "This is the", "That was", {"debug":true}).catch(errfunc);
-  if (res["exit"] === 0)
-    errfunc(`find_replace returned ${res["exit"]}, expected non-0`);
+  if (res["rc"] === 0)
+    errfunc(`find_replace returned ${res["rc"]}, expected non-0`);
   
   console.log("Test: read to verify");
   res = await zoau.datasets.read(DS).catch(errfunc);

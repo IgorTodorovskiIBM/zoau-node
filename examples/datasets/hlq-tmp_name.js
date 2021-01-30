@@ -25,7 +25,7 @@ async function test() {
 
   console.log("Test: _hlq -d");
   res = await zoau.datasets._hlq({"debug":true}).catch(errfunc);
-  console.log('exit=<' + res["exit"] + '>');
+  console.log('exit=<' + res["rc"] + '>');
   console.log('stdout=<' + res["stdout"] + '>');
   if (res["stdout"].trimEnd("\n") !== ID) {
     errfunc(`hlq -d returned ${res["stdout"].trimEnd("\n")}, expected ${ID}`);
@@ -54,9 +54,10 @@ async function test() {
 
   console.log("Test: _tmp_name -d");
   res = await zoau.datasets._tmp_name(null, {"debug":true}).catch(errfunc);
-  console.log('exit=<' + res["exit"] + '>');
+  console.log('exit=<' + res["rc"] + '>');
   console.log('stdout=<' + res["stdout"] + '>');
   console.log('stderr=<' + res["stderr"] + '>');
+  console.log('command=<' + res["command"] + '>');
   if (!res["stdout"].trimEnd("\n").startsWith("MVSTMP")) {
     errfunc(`string returned by '_tmp_name -d' stdout expected to start with 'MVSTMP.', got ${res["stdout"].trimEnd("\n")}`);
     process.exitCode = -1; return;

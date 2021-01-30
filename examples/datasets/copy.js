@@ -23,7 +23,7 @@ async function test() {
 
   console.log("Test: copy a USS source file");
   res = await zoau.datasets._copy("/etc/profile", DS1).catch(errfunc);
-  if (res["exit"] !== 0 || res["stderr"].length !== 0)
+  if (res["rc"] !== 0 || res["stderr"].length !== 0)
     errfunc(`copy failed: ${res["stderr"]}`);
 
   console.log("Test: delete work datasets");

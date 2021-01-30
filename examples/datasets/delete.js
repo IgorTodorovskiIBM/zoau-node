@@ -32,7 +32,7 @@ async function test() {
   console.log("Test: list created datasets matching ZOAU3* pattern");
   res = await zoau.datasets.listing(DSNPATTERN, {"detailed" : true}).catch(errfunc);
   exp = [ DSN1, DSN2, DSN3, DSN4, DSN5 ];
-  if (!(res.length == exp.length && res.every(function(elem, i) { return elem["name"] === exp[i]; }))) {
+  if (!(res.length == exp.length && res.every(function(elem, i) { console.log(`TODO: ${elem["name"]}`); return elem["name"] === exp[i]; }))) {
     errfunc(`unexpected dataset in listing: found ${JSON.stringify(res)}, expected ${exp}`);
   }
   

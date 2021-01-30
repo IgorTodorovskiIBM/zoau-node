@@ -93,10 +93,11 @@ async function test() {
 
   console.log(`Test: move_member non-existent MEM222 in ${PDS_TGT1} to XY (use raw API)`);
   res = await zoau.datasets._move_member(PDS_TGT1, "MEM222", "XY").catch(errfunc);
-  console.log(`res exit=${res["exit"]}`);
+  console.log(`res rc=${res["rc"]}`);
   console.log(`res stdout=${res["stdout"]}`);
   console.log(`res stderr=${res["stderr"]}`);
-  if (res["exit"] === 0)
+  console.log(`res command=${res["command"]}`);
+  if (res["rc"] === 0)
     errfunc(`invalid _move_member returned 'exit' === 0, expected non-0`);
 
   res = await zoau.datasets.find_member("MVED5", `${PDS_TGT2}:${PDS_TGT1}`).catch(errfunc);
