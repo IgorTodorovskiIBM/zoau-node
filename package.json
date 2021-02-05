@@ -2,8 +2,8 @@
   "name": "node-zoau",
   "version": "0.0.1",
   "description": "Node.js APIs to IBM® Z Open Automation Utilitis (ZAU)",
-  "engines": {
-    "node": ">=12.18.0
+  "engines" : {
+    "node" : ">=14.15.1"
   },
   "main": "index.js",
   "scripts": {
