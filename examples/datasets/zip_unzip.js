@@ -70,13 +70,13 @@ async function test() {
   console.log(`Test: create ${PDS_TGT1}`);
   var details = { "primary_space" : 50 };
   var dsdet = await zoau.datasets.create(PDS_TGT1, "PDS", details).catch(errfunc);
-  console.log(`res=${JSON.stringify(dsdet)}`);
-  var volume = dsdet[0]["volume"];
+  var volume = dsdet.to_dict()["volume"];
   console.log(`Volume = ${volume}`);
 
   console.log(`Test: create ${PDS_TGT2}`);
   details = { "primary_space" : 50 };
-  await zoau.datasets.create(PDS_TGT2, "PDS", details).then(console.log).catch(errfunc);
+  var ds = await zoau.datasets.create(PDS_TGT2, "PDS", details).catch(errfunc);
+  console.log(ds.to_dict());
 
   for (i=1; i<=3; i++) {
     let tgt = (i < 4) ? `'${PDS_TGT1}(MEM${i})'` : `'${PDS_TGT1}(ABCD${i})'`;
