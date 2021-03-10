@@ -8,7 +8,8 @@ const zoau = require('../lib/zoau.js')
 
 const fetch = require("node-fetch");
 
-var default_filter = "ITODORO.CSRC";
+const ID = process.env.USER;
+const default_filter = `${ID}.CLIST`;
 
 // REST API
 router.get('/list_members/:pds', (req, res) => {
@@ -24,18 +25,19 @@ router.get('/list_members/:pds', (req, res) => {
     });
     res.json(data);
   }, reason => {
-    // rejection
+    console.error(reason)
+    res.json({});
   });
 });
 
 router.get('/read_pds/:pds', (req, res) => {
-  zoau.datasets.read("'" + req.params.pds + "'").then(function(contents) {
+  zoau.datasets.read(req.params.pds).then(function(contents) {
     res.json({"contents": contents});
   }, reason => {
-    // rejection
+    console.error(reason)
+    res.json({});
   });
 });
-
 
 // UI Routes
 router.all('/', async (req, res) => {
@@ -73,14 +75,22 @@ router.post('/build', async (req, res) => {
     }
     selected = req.body.filename
 
-    // Compile and run 
-    var output = require('child_process').execSync('cd /tmp/ && xlc -+ -o a.out ' + "\"//'" + selected + "'\"" + " && ./a.out").toString();
+    var contents = req.body.contents
+    console.log(req.body.contents);
     
-    // TODO: Write current contents
+    // Preprocess form contents
+    contents = contents.replace(/(\r\n)/gm, "\n");
+    contents = contents.replace(/\s+\n/g, '\n');
+    content = content.replace(/\\/g, "\\\\");
 
-    zoau.datasets.read("'" + selected + "'").then(function(contents) {
+    // Write contents to selected PDS member
+    zoau.datasets.write(selected, contents).then(function(result) {
+      var binary = "demo_" + Math.random().toString(36).substring(7);
+
+      // Compile and run 
+      var output = require('child_process').execSync('cd /tmp/ && xlc -+ -o ' + binary + " \"//'" + selected + "'\"" + " && ./" + binary).toString();
       var data = { "files":files, "selected":selected, "contents":contents, "filter":filter};
-      res.render('edit', {
+        res.render('edit', {
         data: data,
         info: {"output":output},
         csrfToken: req.csrfToken()
