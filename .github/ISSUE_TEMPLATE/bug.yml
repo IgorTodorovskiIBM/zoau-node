@@ -1,4 +1,4 @@
-name: "ZOAU-Node Bug report"
+name: ZOAU-Node Bug report
 description: File a bug report
 body:
   - type: markdown
