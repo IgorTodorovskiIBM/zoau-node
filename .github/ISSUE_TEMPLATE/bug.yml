@@ -1,4 +1,4 @@
-name: "\U0001F41B Bug report"
+name: "ZOAU-Node Bug report"
 description: Create a report to help us improve
 body:
   - type: markdown
@@ -6,8 +6,7 @@ body:
       value: |
         Thank you for reporting an issue.
 
-        This issue tracker is for bugs and issues found within Node.js core.
-        If you require more general support please file an issue on our help repo. https://github.com/nodejs/help
+        This issue tracker is for bugs and issues found within zoau-node.
 
         Please fill in as much of the form below as you're able.
   - type: input
