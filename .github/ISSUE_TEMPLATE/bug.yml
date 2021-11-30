@@ -11,22 +11,27 @@ body:
         Please fill in as much of the form below as you're able.
   - type: input
     attributes:
-      label: Version
+      label: Node.js Version
       description: Output of `node -v`
+  - type: input
+    attributes:
+      label: ZOAU version
+      description: |
+        output of `zoaversion`
+  - type: input
+    attributes:
+      label: zoau-node version
+      description: |
+        version of zoau-node installed
   - type: input
     attributes:
       label: Platform
       description: |
-        UNIX: output of `uname -a`
-        Windows: output of `"$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"` in PowerShell console
-  - type: input
-    attributes:
-      label: Subsystem
-      description: If known, please specify affected core module name
+        output of `uname -a`
   - type: textarea
     attributes:
       label: What steps will reproduce the bug?
-      description: Enter details about your bug, preferably a simple code snippet that can be run using `node` directly without installing third-party dependencies.
+      description: Enter details about your bug, preferably a simple code snippet.
   - type: textarea
     attributes:
       label: How often does it reproduce? Is there a required condition?
