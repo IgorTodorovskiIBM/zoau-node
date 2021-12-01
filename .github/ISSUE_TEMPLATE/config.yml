@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: IBM® Z Open Automation Utilities (ZAU)
+  - name: IBM® Z Open Automation Utilities (ZOAU)
     url: https://github.com/IBM/zoau
     about: Please report ZOAU core issues here
