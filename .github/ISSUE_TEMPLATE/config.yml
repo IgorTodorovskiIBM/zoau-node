@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: GitHub Community Support
-    url: https://github.community/
-    about: Please ask and answer questions here.
-  - name: GitHub Security Bug Bounty
-    url: https://bounty.github.com/
-    about: Please report security vulnerabilities here.
+  - name: IBM® Z Open Automation Utilities (ZOU)
+    url: https://github.com/IBM/zoau
+    about: Please report ZOAU core issues here
